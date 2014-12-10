@@ -83,9 +83,9 @@ Shade_Surface(const Ray& ray,const Object& intersection_object,const Vector_3D<d
 		// if one lightray intersects an object, delete from further calcs
 		if (num_shadows == 1) {
 			if (light_vec[0].semi_infinite == false)
-				light_vec.erase(light_vec.begin() + 1);
-			else
 				light_vec.erase(light_vec.begin());
+			else
+				light_vec.erase(light_vec.begin()+1);
 		}	
 
 		// if both intersect, return ambiant light

@@ -63,9 +63,15 @@ void Initialize_World(Render_World& world,const int width,const int height,const
 {
     Vector_3D<double> color1(1,0,0);
     Vector_3D<double> color2(.2,.2,.8);
+    Vector_3D<double> color3(.2,.7,.8);
+    Vector_3D<double> color4(0,1,0);
+
+
     Vector_3D<double> plane_color(1,0.775,0.5431);
 
     Plane* plane=new Plane(Vector_3D<double>(),Vector_3D<double>(0,1,0));
+	Plane* plane2=new Plane(Vector_3D<double>(0,0,7),Vector_3D<double>(0,0,-1));
+	Plane* plane3=new Plane(Vector_3D<double>(12,0,0),Vector_3D<double>(-1,0,0));
     Sphere* sphere=new Sphere(Vector_3D<double>(0,1,0),1.0);
     Sphere* sphere2=new Sphere(Vector_3D<double>(-2,1,-1),1.0);
 
@@ -107,14 +113,29 @@ void Initialize_World(Render_World& world,const int width,const int height,const
             world.camera.Position_And_Aim_Camera(Vector_3D<double>(0,4,-6),Vector_3D<double>(-1,1,0),Vector_3D<double>(0,1,0));
             world.camera.Focus_Camera(1,(double)width/(double)height,(double)50/(double)180*PI);
             break;
+	    case 5:
+		    plane->material_shader=new Phong_Shader(world,plane_color,plane_color);
+			plane2->material_shader=new Phong_Shader(world,color3,color3);
+			plane3->material_shader=new Phong_Shader(world,color4,color4);
+
+            sphere->material_shader=new Phong_Shader(world,color1,color1);
+            sphere2->material_shader=new Phong_Shader(world,color2,color2);
+            world.enable_shadows=true;
+            world.recursion_depth_limit=0;
+            world.camera.Position_And_Aim_Camera(Vector_3D<double>(0,2,-10),Vector_3D<double>(0,1,0),Vector_3D<double>(0,1,0));
+            world.camera.Focus_Camera(1,(double)width/(double)height,(double)70/(double)180*PI);
+		    //world.objects.push_back(plane2);
+		    world.objects.push_back(plane3);
+            break;
+
         default:
             std::cout<<"Unrecognized test number"<<std::endl;
             exit(1);
     }
 
     // lights
-    Light* point_light=new Point_Light(Vector_3D<double>(-2,7,-3),Vector_3D<double>(1,1,1),.25);
-    Light* point_light2=new Point_Light(Vector_3D<double>(3,5,-3),Vector_3D<double>(1,1,1),.25);
+    Light* point_light=new Point_Light(Vector_3D<double>(-4,7,-3),Vector_3D<double>(1,1,1),.25);
+    Light* point_light2=new Point_Light(Vector_3D<double>(-8,5,-3),Vector_3D<double>(1,1,1),.25);
 
     world.objects.push_back(plane);
     world.objects.push_back(sphere);
@@ -130,7 +151,7 @@ int main(int argc, char** argv)
 {
     if(argc!=2) Usage(argv[0]);
     int test_number=atoi(argv[1]);
-    if(test_number<1 || test_number>4) Usage(argv[0]);
+    if(test_number<1 || test_number>5) Usage(argv[0]);
 
     Initialize_Opengl_And_Glut(argc,argv);
     Initialize_World(world,WIDTH,HEIGHT,test_number);
