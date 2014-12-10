@@ -1,0 +1,24 @@
+Andrew Sowell
+Project 1 "Raytracer"
+CS230
+
+PHONG SHADER: function returns a color by calculating three types of light: specular, diffuse and ambient. When “Shadows” are enabled, rays are cast towards the light sources in search of objects obstructing their path. If they are found, only ambient light value is returned. Next the specular and diffuse light values are calculated through normalized direction vectors (and their dot products) in order to find their relative intensity to the light.
+
+Aside from standard formulas, I created a light vector so as to easily loop/sum the values of multiple light sources. Also,  looping allowed the extraneous variables to be confined to a limited scope, which I find safer in C++. Lastly, the endpoint of each created Ray was shifted a small amount away from the object so that they do not accidentally intersect with their own object when cast into the scene.
+
+REFLECTIVE SHADER: function nearly identical to the Phong shader except for the last 10 lines. A reflected ray is created with a particular recursion_depth value. This incremented value is important because the ensuing recursive calls rely on its value to find the base case. After four calls, the combined values of each recursive call (multiplied by their reflectivity) are added to the Phong Shader value and returned. Once again the ray objects are shifted slightly away from the object surface to avoid false intersections.
+
+SPHERE INTERSECTION: function determines if a Ray intersects with the surface of a Sphere. By plugging the equation of a line into the equation of a sphere, we can find the two possible t values which serve as distances to valid intersections. The equation can be refactored as the quadratic equation, which in turn informs the number of solutions (0, 1, or 2) through the value of its discriminant.
+
+SPHERE NORMAL: this function simply subtracts the Center components from the Point components, then normalizes the result.
+
+NORMAL INTERSECTION: like sphere intersection, this function finds t values by plugging the equation of a line into the equation of a plane. We determine intersection through the value of t (distance from camera to intersection), and return True if t > 0. 
+
+WORLD POSITION: a handy function, X, was included with the skeleton code which converts (i,j) indices into values -1 <= x,y <= 1 that relate to the image size. The 3D position is found by multiplying these values with their respective horizontal and vertical vectors and add them to the focal point.
+
+CLOSEST INTERSECTION: this function iterates through the objects of the world in order to determine points of intersection with a given Ray. Because the Ray argument is passed by reference, the object of closest intersection is retained in the attributes of the ray. Furthermore, polymorphism allows the same function to be called on any Object subclass, which would be very useful if new primitives were to be added to the raytracer.
+
+RENDER PIXEL: function creates each ray, initializes its attributes, and casts it into the scene to compute the pixels color attribute. It is the highest level of abstraction of my completed functions because it encompasses all of the other implemented functions with a single call. I decided to  set t_max to 1,000,000 because I was unsure if INFINITY would be reliable across various compilers/environments. Also, the recursive_depth increments from 0 to world.recursive_depth_limit, but could just have easily decremented from that value to 0.
+
+CAST RAY: function contains all of the main functionality of a raytracer: object intersection and shading. While the implementation is very straightfoward ( > 12 lines), it routes traffic for the more involved functions (including recursive calls).
+
