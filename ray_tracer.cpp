@@ -14,6 +14,8 @@
 #include <cmath>
 #include <vector>
 
+//WHOOOOOOOOOOOOOOOOOOOOOOOHOOOOOOOOOOOOOOOOOOOOO
+
 using namespace std;
 
 const double Object::small_t=1e-6;
